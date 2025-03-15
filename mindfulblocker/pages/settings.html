@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mindful Access Settings</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background: #f5f5f5;
+            line-height: 1.5;
+        }
+
+        h2 {
+            color: #2d2d2d;
+            border-bottom: 2px solid #e1e4e8;
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .settings-container {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .settings-container:first-of-type {
+            margin-top: 0;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #24292e;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            font-family: monospace;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .blocked-sites {
+            margin-top: 20px;
+        }
+
+        .site-entry {
+            padding: 15px;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+        }
+
+        button {
+            background: #0366d6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background: #0256b4;
+        }
+
+        .error {
+            color: #cb2431;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .success {
+            color: #22863a;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .history-entry {
+            padding: 15px;
+            margin: 10px 0;
+            background: #f6f8fa;
+            border-radius: 6px;
+            border: 1px solid #e1e4e8;
+        }
+
+        .granted {
+            border-left: 4px solid #28a745;
+        }
+
+        .denied {
+            border-left: 4px solid #cb2431;
+        }
+
+        .history-controls {
+            display: flex;
+            justify-content: flex-end;
+            margin: 20px 0;
+        }
+
+        .api-key-section {
+            background: #f6f8fa;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            border: 1px solid #e1e4e8;
+        }
+
+        .key-status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 15px 0;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #cb2431;
+        }
+
+        .status-dot.active {
+            background: #28a745;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            font-family: monospace;
+            padding: 12px;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: vertical;
+        }
+
+        .small-text {
+            font-size: 14px;
+            color: #586069;
+            margin-top: 8px;
+        }
+
+        .block-site-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 6px;
+            border: 1px solid #e1e4e8;
+            margin-top: 1rem;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-field label {
+            font-weight: 500;
+            color: #24292e;
+        }
+
+        .form-field input,
+        .form-field textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .form-field textarea {
+            resize: vertical;
+            min-height: 80px;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        .block-site-form button {
+            align-self: flex-start;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 840px) {
+            body {
+                margin: 20px auto;
+                padding: 0 15px;
+            }
+
+            .settings-container {
+                padding: 20px;
+            }
+
+            .site-entry {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            .input-group button {
+                width: 100%;
+            }
+
+            .block-site-form {
+                padding: 1rem;
+            }
+
+            .block-site-form button {
+                align-self: stretch;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="settings.css">
+</head>
+
+<body>
+    <div class="settings-container">
+        <h2>Mindful Access Settings</h2>
+
+        <!-- API Key Section -->
+        <div class="api-key-section">
+            <h3>Claude API Key</h3>
+            <div class="key-status">
+                <div id="statusDot" class="status-dot"></div>
+                <span id="keyStatus">No API key set</span>
+            </div>
+
+            <!-- New Key Form -->
+            <div id="newKeyForm" style="display: none;">
+                <input type="password" id="apiKey" placeholder="Enter your Claude API key (starts with sk-)">
+                <button id="saveKey">Save API Key</button>
+            </div>
+
+            <!-- Existing Key Actions -->
+            <div id="existingKeyActions" style="display: none;">
+                <button id="changeKey">Change API Key</button>
+                <button id="removeKey">Remove API Key</button>
+            </div>
+        </div>
+
+        <!-- Block New Site Section -->
+        <div class="section">
+            <h2>Add Blocked Sites</h2>
+            <div class="help-text">
+                <p><strong>Pattern Format:</strong></p>
+                <ul>
+                    <li>Enter one or more patterns separated by commas</li>
+                    <li>Patterns can be:
+                        <ul>
+                            <li>Simple domains: <code>facebook.com</code></li>
+                            <li>Domains with paths: <code>reddit.com/r/popular</code></li>
+                            <li>Multiple patterns: <code>reddit.com/r/popular, twitter.com, facebook.com/games</code></li>
+                        </ul>
+                    </li>
+                    <li>The pattern will match if it appears anywhere in the URL</li>
+                    <li>No need to include http://, https://, or www. - they'll be handled automatically</li>
+                </ul>
+            </div>
+            <div class="block-site-form">
+                <div class="form-field">
+                    <label for="newSite">Site Pattern(s):</label>
+                    <input type="text" id="newSite" placeholder="e.g., reddit.com/r/popular, twitter.com">
+                </div>
+                <div class="form-field">
+                    <label for="blockReason">Reason for Blocking (optional):</label>
+                    <textarea id="blockReason" rows="3" placeholder="Optional: Why do you want to block these sites?"></textarea>
+                </div>
+                <button id="addSite">Add Site</button>
+            </div>
+        </div>
+
+        <!-- Blocked Sites Section -->
+        <div class="blocked-sites">
+            <h3>Blocked Sites</h3>
+            <div id="sitesList">
+                <!-- Blocked sites will be listed here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add content extraction mode setting -->
+    <div class="settings-container">
+        <h3>Page Content Settings</h3>
+        <div class="form-group">
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                <input type="checkbox" id="enableContentExtraction" style="margin-right: 10px;">
+                <label for="enableContentExtraction">Show LLM page content?</label>
+            </div>
+            <small class="form-text text-muted">
+                When enabled, Claude will see page content and can answer questions about it.
+                When disabled, no page content will be extracted or included in the prompt, making Claude unaware of the
+                page content.
+            </small>
+        </div>
+    </div>
+
+    <div class="settings-container">
+        <h3>Usage Statistics</h3>
+        <!-- Usage statistics content -->
+    </div>
+
+    <!-- System Prompt Template Section -->
+    <div class="settings-container">
+        <div class="form-group">
+            <h3>System Prompt Template</h3>
+            <p>Customize the instructions sent to Claude when evaluating a blocked site.</p>
+            <textarea id="systemPromptTemplate" rows="10"
+                style="width: 100%; font-family: monospace; margin-bottom: 10px; padding: 8px;"></textarea>
+            <button id="saveTemplate">Save Template</button>
+            <button id="resetTemplate">Reset to Default</button>
+            <div id="templateStatus" style="margin-top: 10px;"></div>
+        </div>
+    </div>
+
+    <!-- Access History Section - Moved after System Prompt Template -->
+    <div class="settings-container">
+        <div class="blocked-sites">
+            <h3>Access History</h3>
+            <div class="history-controls">
+                <button id="clearHistory">Clear History</button>
+            </div>
+            <div id="accessHistoryList">
+                <!-- Access history will be listed here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="../defaultPrompt.js"></script>
+    <script src="../storageHelper.js"></script>
+    <script src="settings.js"></script>
+</body>
+
+</html>

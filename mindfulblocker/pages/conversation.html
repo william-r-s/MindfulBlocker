@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+   <title>Mindful Access - Conversation with Claude</title>
+   <style>
+    body {
+        font-family: system-ui, -apple-system, sans-serif;
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background: #f5f5f5;
+    }
+    .conversation-container {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .message {
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 4px;
+    }
+    .context {
+        background: #f0f0f0;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-left: 4px solid #0060df;
+    }
+    #userInput {
+        width: 100%;
+        min-height: 80px;
+        margin: 10px 0;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+    }
+    button {
+        background: #0060df;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #003eaa;
+    }
+    .success {
+        background: #d4edda;
+        color: #155724;
+        padding: 15px;
+        border-radius: 4px;
+        margin: 10px 0;
+    }
+    .bypass-status {
+        background: #e2e3e5;
+        padding: 10px;
+        border-radius: 4px;
+        margin: 10px 0;
+    }
+    .timer {
+        font-weight: bold;
+        color: #0060df;
+    }
+    .error {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 15px;
+        border-radius: 4px;
+        margin: 10px 0;
+    }
+    .assistant {
+        background: #e9ecef;
+        border-left: 4px solid #6c757d;
+    }
+    .user {
+        background: #f8f9fa;
+        border-left: 4px solid #0060df;
+    }
+    @media (max-width: 600px) {
+        body {
+            margin: 10px;
+            padding: 10px;
+        }
+        .conversation-container {
+            padding: 10px;
+        }
+        #userInput {
+            min-height: 60px;
+        }
+        button {
+            padding: 12px 20px;
+            width: 100%;
+            margin-top: 10px;
+        }
+    }
+</style>
+   </head>
+<body>
+   <div class="conversation-container">
+       <div id="blockContext" class="block-context"></div>
+       <div id="expiredNotice" class="expired-notice" style="display: none;">
+           <p>⏰ Your access period has expired. You'll need to request access again to continue browsing.</p>
+       </div>
+       <div id="conversationHistory" class="conversation-history">
+           <!-- Conversation messages will appear here -->
+       </div>
+       <textarea id="userInput" 
+           placeholder="Explain why you'd like to access this site right now..."></textarea>
+       <button id="sendMessage">Send</button>
+   </div>
+   <script src="../storageHelper.js"></script>
+   <script src="conversation.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+{
+    "manifest_version": 2,
+    "name": "Mindful Access with Claude",
+    "version": "0.2.0",
+    "description": "Have a thoughtful conversation with Claude before accessing blocked sites",
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "{2fbe1761-fa13-4fed-bb05-a622ebc513f0}"
+        }
+    },
+    "permissions": [
+        "activeTab",
+        "storage",
+        "webRequest",
+        "webRequestBlocking",
+        "<all_urls>",
+        "tabs"
+    ],
+    "background": {
+        "scripts": [
+            "defaultPrompt.js",
+            "contentExtractors.js",
+            "storageHelper.js",
+            "background.js"
+        ],
+        "persistent": true
+    },
+    "browser_action": {
+        "default_title": "Mindful Access Settings"
+    },
+    "web_accessible_resources": [
+        "pages/conversation.html",
+        "pages/conversation.js",
+        "pages/settings.html",
+        "pages/settings.js",
+        "defaultPrompt.js",
+        "storageHelper.js"
+    ],
+    "content_security_policy": "script-src 'self' https://api.anthropic.com; object-src 'self'; connect-src https://api.anthropic.com http://* https://*"
+}
