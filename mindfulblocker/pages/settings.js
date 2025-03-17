@@ -265,7 +265,7 @@ document.getElementById('saveTemplate').addEventListener('click', async function
         const template = document.getElementById('systemPromptTemplate').value.trim();
 
         // Validate that template contains required placeholders
-        const requiredPlaceholders = ['{{domain}}', '{{blockReason}}'];
+        const requiredPlaceholders = ['{{domain}}', '{{blockReason}}', '{{fullUrl}}'];
         const missingPlaceholders = requiredPlaceholders.filter(placeholder =>
             !template.includes(placeholder)
         );

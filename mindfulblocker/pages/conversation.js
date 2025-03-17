@@ -37,8 +37,9 @@ async function initConversation() {
             return;
         }
 
-        // Password no longer required
-        // password = await getPasswordFromUser();
+        // Get the full URL from tempExtractedContent
+        const fullUrl = data.tempExtractedContent?.url || `https://${domain}`;
+        console.log('Full URL being accessed:', fullUrl);
 
         // Get recent attempts for context
         const history = data.accessHistory || {};
@@ -58,55 +59,35 @@ Content: ${extractedContent.content}
 Type: ${extractedContent.type}`
             : '\nNo content available';
 
-        // Update block context display
+        // Update block context display with full URL
         const blockContext = document.getElementById('blockContext');
         if (blockReason) {
-            blockContext.textContent = `You've blocked ${domain} because: ${blockReason}`;
+            blockContext.textContent = `You've blocked ${domain} (${fullUrl}) because: ${blockReason}`;
         } else {
-            blockContext.textContent = `You've blocked ${domain}`;
+            blockContext.textContent = `You've blocked ${domain} (${fullUrl})`;
         }
 
-        // If there's a custom template, use it, otherwise use the default hardcoded one
-        if (data.systemPromptTemplate) {
-            // Replace placeholders in the template
-            window.systemInstructions = data.systemPromptTemplate
-                .replace(/{{domain}}/g, domain)
-                .replace(/{{blockReason}}/g, blockReason)
-                .replace(/{{historyText}}/g, historyText)
-                .replace(/{{title}}/g, extractedContent?.title || 'Not available')
-                .replace(/{{content}}/g, extractedContent?.content || 'No content available');
-        } else {
-            // Use default hardcoded template
-            window.systemInstructions = `
-You are an AI assistant helping your user browse the web mindfully.
-DOMAIN: ${domain}
-BLOCK REASON: ${blockReason}
-${historyText}
+        // Prepare variables for the prompt
+        const promptVariables = {
+            domain,
+            fullUrl,
+            blockReason,
+            historyText,
+            title: extractedContent?.title || 'Not available',
+            content: extractedContent?.content || 'No content available'
+        };
 
-CONTENT FROM PAGE:
-Title: ${extractedContent?.title || 'Not available'}
-${extractedContent?.content || 'No content available'}
-
-YOUR ROLE:
-- The user will either ask for access to the site or ask questions about its content
-- If they ask for access, evaluate their request mindfully
-- If they ask questions about the content, answer based on the extracted content above
-- You may decline to answer questions if you think it would defeat the purpose of the block
-- Keep answers focused and relevant to their specific question
-
-RESPONSE RULES:
-IF GRANTING ACCESS:
-Your ENTIRE response must be in the form of:
-"ACCESS GRANTED for X minutes"
-Default to 5 minutes.
-
-IF DENYING ACCESS OR ANSWERING QUESTIONS:
-- Explain your reasoning
-- Suggest alternatives when appropriate
-- Stay focused on the user's specific query
-`.trim();
-        }
-
+        // Always use the user's configured template from settings
+        const template = data.systemPromptTemplate || window.DEFAULT_SYSTEM_PROMPT;
+        
+        // Replace placeholders in the template
+        window.systemInstructions = template
+            .replace(/{{domain}}/g, promptVariables.domain)
+            .replace(/{{blockReason}}/g, promptVariables.blockReason || '')
+            .replace(/{{historyText}}/g, promptVariables.historyText)
+            .replace(/{{title}}/g, promptVariables.title)
+            .replace(/{{content}}/g, promptVariables.content)
+            .replace(/{{fullUrl}}/g, promptVariables.fullUrl);
 
     } catch (error) {
         displayError(`Error initializing conversation: ${error.message}`);

@@ -2,6 +2,7 @@
 const DEFAULT_SYSTEM_PROMPT = `You are an AI assistant helping your user browse the web mindfully.
 
 DOMAIN: {{domain}}
+FULL URL: {{fullUrl}}
 ${blockReason ? `BLOCK REASON: {{blockReason}}` : ''}
 {{historyText}}
 
