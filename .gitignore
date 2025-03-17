@@ -1,3 +1,5 @@
 mindfulblocker/web-ext-artifacts/
 releases
 .DS_Store
+mindfulblocker/.amo-upload-uuid
+sign.sh

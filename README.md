@@ -16,5 +16,8 @@ Should work on both desktop and mobile firefox
 - When accessing a blocked domain, the extension uses the anthropic api to have the conversation with Claude. Claude receives the domain and the history of access
 - If you enable "Show LLM page content?" the extension tries to extract content from the web page and also passes it to the language model.
 
+# Development
+Run tests with
+```node mindfulblocker/tests/runTests.js```
 
 Thanks to [Kerrigan Madden](https://github.com/handoftheenemy) for developing the initial version of this extension.

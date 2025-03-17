@@ -144,18 +144,14 @@ async function addBypass(domain, durationMinutes = 30) {
 async function handleRequest(details) {
     const url = new URL(details.url);
     const fullUrl = details.url.toLowerCase();
-    // Remove protocol and www. from the URL for matching
-    const urlForMatching = fullUrl.replace(/^https?:\/\/(www\.)?/, '');
 
     console.log("Processing request:", {
-        url: fullUrl,
-        urlForMatching: urlForMatching
+        url: fullUrl
     });
 
-    // Find matching block rule
+    // Find matching block rule using the shared matchesDomain function
     const matchingRule = Object.entries(blockedSites).find(([key, data]) => {
-        const patterns = key.split(',').map(pattern => pattern.trim().toLowerCase());
-        return patterns.some(pattern => urlForMatching.includes(pattern));
+        return matchesDomain(key, fullUrl);
     });
 
     if (!matchingRule) {
@@ -221,7 +217,9 @@ async function handleRequest(details) {
         });
 
         const conversationUrl = browser.runtime.getURL("pages/conversation.html") +
-            `?domain=${encodeURIComponent(ruleKey)}${blockedSites[ruleKey]?.reason ? `&reason=${encodeURIComponent(blockedSites[ruleKey].reason)}` : ''}`;
+            `?domain=${encodeURIComponent(ruleKey)}` +
+            `${blockedSites[ruleKey]?.reason ? `&reason=${encodeURIComponent(blockedSites[ruleKey].reason)}` : ''}` +
+            `&url=${encodeURIComponent(details.url)}`;
 
         await browser.tabs.update(details.tabId, {
             url: conversationUrl

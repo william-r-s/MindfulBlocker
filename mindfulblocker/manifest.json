@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Mindful Access with Claude",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "Have a thoughtful conversation with Claude before accessing blocked sites",
     "browser_specific_settings": {
         "gecko": {
@@ -21,6 +21,7 @@
             "defaultPrompt.js",
             "contentExtractors.js",
             "storageHelper.js",
+            "domainMatcher.js",
             "background.js"
         ],
         "persistent": true
@@ -34,6 +35,7 @@
         "pages/settings.html",
         "pages/settings.js",
         "defaultPrompt.js",
+        "domainMatcher.js",
         "storageHelper.js"
     ],
     "content_security_policy": "script-src 'self' https://api.anthropic.com; object-src 'self'; connect-src https://api.anthropic.com http://* https://*"

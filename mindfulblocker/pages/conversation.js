@@ -5,6 +5,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const domain = urlParams.get('domain');
 const blockReason = urlParams.get('reason');
 const isExpired = urlParams.get('expired') === 'true';
+const fullUrl = urlParams.get('url') || `https://${domain}`;
 
 // Keep an in-memory conversation history array of user/assistant messages only
 let conversationHistory = [];
@@ -37,8 +38,6 @@ async function initConversation() {
             return;
         }
 
-        // Get the full URL from tempExtractedContent
-        const fullUrl = data.tempExtractedContent?.url || `https://${domain}`;
         console.log('Full URL being accessed:', fullUrl);
 
         // Get recent attempts for context
@@ -77,8 +76,13 @@ Type: ${extractedContent.type}`
             content: extractedContent?.content || 'No content available'
         };
 
-        // Always use the user's configured template from settings
-        const template = data.systemPromptTemplate || window.DEFAULT_SYSTEM_PROMPT;
+        // Get the template from settings or use default
+        let template = data.systemPromptTemplate;
+        if (!template && window.DEFAULT_SYSTEM_PROMPT) {
+            template = window.DEFAULT_SYSTEM_PROMPT;
+        } else if (!template) {
+            throw new Error('No prompt template available. Please check your extension settings.');
+        }
         
         // Replace placeholders in the template
         window.systemInstructions = template
