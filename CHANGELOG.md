@@ -1,3 +1,6 @@
+## [0.2.2] - 2025-03-31
+- fix bug in default prompt, redirection, allow settings export
+
 ## [0.2.1] - 2025-03-17
 
 ### Added
