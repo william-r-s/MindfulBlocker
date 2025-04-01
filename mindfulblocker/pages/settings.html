@@ -22,6 +22,11 @@
             margin-top: 2rem;
         }
 
+        h3 {
+            margin-top: 1.5rem;
+            color: #24292e;
+        }
+
         .settings-container {
             background: white;
             padding: 25px;
@@ -203,8 +208,65 @@
         }
 
         .block-site-form button {
-            align-self: flex-start;
-            margin-top: 0.5rem;
+            align-self: stretch;
+        }
+
+        .settings-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .settings-actions button {
+            flex: 1;
+        }
+
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        #importText {
+            width: 100%;
+            font-family: monospace;
+            padding: 10px;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            margin: 10px 0;
         }
 
         @media (max-width: 840px) {
@@ -266,36 +328,36 @@
                 <button id="removeKey">Remove API Key</button>
             </div>
         </div>
+    </div>
 
-        <!-- Block New Site Section -->
-        <div class="section">
-            <h2>Add Blocked Sites</h2>
-            <div class="help-text">
-                <p><strong>Pattern Format:</strong></p>
-                <ul>
-                    <li>Enter one or more patterns separated by commas</li>
-                    <li>Patterns can be:
-                        <ul>
-                            <li>Simple domains: <code>facebook.com</code></li>
-                            <li>Domains with paths: <code>reddit.com/r/popular</code></li>
-                            <li>Multiple patterns: <code>reddit.com/r/popular, twitter.com, facebook.com/games</code></li>
-                        </ul>
-                    </li>
-                    <li>The pattern will match if it appears anywhere in the URL</li>
-                    <li>No need to include http://, https://, or www. - they'll be handled automatically</li>
-                </ul>
+    <!-- Block New Site Section -->
+    <div class="settings-container">
+        <h2>Add Blocked Sites</h2>
+        <div class="help-text">
+            <p><strong>Pattern Format:</strong></p>
+            <ul>
+                <li>Enter one or more patterns separated by commas</li>
+                <li>Patterns can be:
+                    <ul>
+                        <li>Simple domains: <code>facebook.com</code></li>
+                        <li>Domains with paths: <code>reddit.com/r/popular</code></li>
+                        <li>Multiple patterns: <code>reddit.com/r/popular, twitter.com, facebook.com/games</code></li>
+                    </ul>
+                </li>
+                <li>The pattern will match if it appears anywhere in the URL</li>
+                <li>No need to include http://, https://, or www. - they'll be handled automatically</li>
+            </ul>
+        </div>
+        <div class="block-site-form">
+            <div class="form-field">
+                <label for="newSite">Site Pattern(s):</label>
+                <input type="text" id="newSite" placeholder="e.g., reddit.com/r/popular, twitter.com">
             </div>
-            <div class="block-site-form">
-                <div class="form-field">
-                    <label for="newSite">Site Pattern(s):</label>
-                    <input type="text" id="newSite" placeholder="e.g., reddit.com/r/popular, twitter.com">
-                </div>
-                <div class="form-field">
-                    <label for="blockReason">Reason for Blocking (optional):</label>
-                    <textarea id="blockReason" rows="3" placeholder="Optional: Why do you want to block these sites?"></textarea>
-                </div>
-                <button id="addSite">Add Site</button>
+            <div class="form-field">
+                <label for="blockReason">Reason for Blocking (optional):</label>
+                <textarea id="blockReason" rows="3" placeholder="Optional: Why do you want to block these sites?"></textarea>
             </div>
+            <button id="addSite">Add Site</button>
         </div>
 
         <!-- Blocked Sites Section -->
@@ -307,9 +369,9 @@
         </div>
     </div>
 
-    <!-- Add content extraction mode setting -->
+    <!-- Content Extraction Settings -->
     <div class="settings-container">
-        <h3>Page Content Settings</h3>
+        <h2>Page Content Settings</h2>
         <div class="form-group">
             <div style="display: flex; align-items: center; margin-bottom: 10px;">
                 <input type="checkbox" id="enableContentExtraction" style="margin-right: 10px;">
@@ -323,34 +385,63 @@
         </div>
     </div>
 
+    <!-- Usage Statistics -->
     <div class="settings-container">
-        <h3>Usage Statistics</h3>
+        <h2>Usage Statistics</h2>
         <!-- Usage statistics content -->
     </div>
 
     <!-- System Prompt Template Section -->
     <div class="settings-container">
+        <h2>System Prompt Template</h2>
         <div class="form-group">
-            <h3>System Prompt Template</h3>
             <p>Customize the instructions sent to Claude when evaluating a blocked site.</p>
-            <textarea id="systemPromptTemplate" rows="10"
-                style="width: 100%; font-family: monospace; margin-bottom: 10px; padding: 8px;"></textarea>
-            <button id="saveTemplate">Save Template</button>
-            <button id="resetTemplate">Reset to Default</button>
+            <textarea id="systemPromptTemplate" rows="10"></textarea>
+            <div style="margin-top: 10px;">
+                <button id="saveTemplate">Save Template</button>
+                <button id="resetTemplate">Reset to Default</button>
+            </div>
             <div id="templateStatus" style="margin-top: 10px;"></div>
         </div>
     </div>
 
-    <!-- Access History Section - Moved after System Prompt Template -->
+    <!-- Import/Export Settings Section -->
     <div class="settings-container">
-        <div class="blocked-sites">
-            <h3>Access History</h3>
-            <div class="history-controls">
-                <button id="clearHistory">Clear History</button>
+        <h2>Import/Export Settings</h2>
+        <div class="form-group">
+            <p>Backup your settings or restore from a previous backup.</p>
+            <div class="settings-actions">
+                <button id="copySettings">Copy Settings to Clipboard</button>
+                <button id="importSettings">Import Settings</button>
             </div>
-            <div id="accessHistoryList">
-                <!-- Access history will be listed here -->
+            <small class="form-text text-muted">
+                Export your settings as JSON or import settings from a previously exported JSON.
+            </small>
+        </div>
+        
+        <!-- Import Settings Modal -->
+        <div id="importModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h3>Import Settings</h3>
+                <p>Paste your settings JSON below:</p>
+                <textarea id="importText" rows="10" placeholder="Paste settings JSON here..."></textarea>
+                <div class="modal-actions">
+                    <button id="confirmImport">Import</button>
+                    <button id="cancelImport">Cancel</button>
+                </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Access History Section -->
+    <div class="settings-container">
+        <h2>Access History</h2>
+        <div class="history-controls">
+            <button id="clearHistory">Clear History</button>
+        </div>
+        <div id="accessHistoryList">
+            <!-- Access history will be listed here -->
         </div>
     </div>
 

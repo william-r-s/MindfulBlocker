@@ -339,3 +339,90 @@ function showAlert(message, type = 'info') {
         setTimeout(() => alertBox.remove(), 500);
     }, 1500);
 }
+
+// Copy settings to clipboard
+document.getElementById('copySettings').addEventListener('click', async function() {
+    try {
+        // Get all settings
+        const settings = await storageHelper.get([
+            'blockedSites',
+            'apiKey',
+            'enableContentExtraction',
+            'systemPromptTemplate',
+            'accessHistory'
+        ]);
+
+        // Convert to JSON string with pretty formatting
+        const jsonString = JSON.stringify(settings, null, 2);
+        
+        // Copy to clipboard
+        await navigator.clipboard.writeText(jsonString);
+        showAlert('Settings copied to clipboard', 'success');
+    } catch (error) {
+        showAlert('Failed to copy settings: ' + error.message, 'error');
+    }
+});
+
+// Modal handling
+function openImportModal() {
+    const modal = document.getElementById('importModal');
+    modal.style.display = 'flex';
+}
+
+function closeImportModal() {
+    const modal = document.getElementById('importModal');
+    modal.style.display = 'none';
+    document.getElementById('importText').value = '';
+}
+
+// Import settings button - show modal
+document.getElementById('importSettings').addEventListener('click', function() {
+    openImportModal();
+});
+
+// Close modal when clicking the X
+document.querySelector('.close-modal').addEventListener('click', function() {
+    closeImportModal();
+});
+
+// Close modal when clicking cancel
+document.getElementById('cancelImport').addEventListener('click', function() {
+    closeImportModal();
+});
+
+// Import settings from text area
+document.getElementById('confirmImport').addEventListener('click', async function() {
+    const jsonText = document.getElementById('importText').value.trim();
+    
+    if (!jsonText) {
+        showAlert('No settings data provided', 'error');
+        return;
+    }
+
+    try {
+        const settings = JSON.parse(jsonText);
+
+        // Validate required fields
+        if (typeof settings !== 'object') {
+            throw new Error('Invalid settings format');
+        }
+
+        // Save settings
+        await storageHelper.set(settings);
+
+        // Reload settings to update UI
+        await loadSettings();
+        showAlert('Settings imported successfully', 'success');
+        closeImportModal();
+    } catch (error) {
+        showAlert('Failed to import settings: ' + error.message, 'error');
+    }
+});
+
+// Click outside modal to close
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('importModal');
+    if (event.target === modal) {
+        closeImportModal();
+    }
+});

@@ -3,7 +3,7 @@ const DEFAULT_SYSTEM_PROMPT = `You are an AI assistant helping your user browse 
 
 DOMAIN: {{domain}}
 FULL URL: {{fullUrl}}
-${blockReason ? `BLOCK REASON: {{blockReason}}` : ''}
+BLOCK REASON: {{blockReason}}
 {{historyText}}
 
 CONTENT FROM PAGE:

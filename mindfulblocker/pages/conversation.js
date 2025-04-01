@@ -207,9 +207,9 @@ async function handleBypassApproval(duration) {
         messageDiv.appendChild(messagePara);
         container.appendChild(messageDiv);
 
-        // Redirect to the domain after a short delay
+        // Redirect to the fullUrl after a short delay
         setTimeout(() => {
-            window.location.href = `https://${domain}`;
+            window.location.href = fullUrl;
         }, 2000);
     } catch (error) {
         displayError('Failed to grant access: ' + error.message);
