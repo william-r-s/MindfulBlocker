@@ -211,17 +211,38 @@ function createTestRunner() {
         resultDiv.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
         resultDiv.style.maxWidth = '80%';
         
-        resultDiv.innerHTML = `
-            <h3>Test Results</h3>
-            <p>Passed: ${results.passed}</p>
-            <p>Failed: ${results.failed}</p>
-            <p>Total: ${results.total}</p>
-            <p>${results.success ? '✅ All tests passed!' : '❌ Some tests failed!'}</p>
-            <button id="closeResults" style="padding: 5px 10px; background: #0060df; color: white; 
-                     border: none; border-radius: 4px; cursor: pointer; margin-top: 10px;">
-                Close
-            </button>
-        `;
+        // Create and append elements instead of using innerHTML
+        const heading = document.createElement('h3');
+        heading.textContent = 'Test Results';
+        resultDiv.appendChild(heading);
+        
+        const passedPara = document.createElement('p');
+        passedPara.textContent = `Passed: ${results.passed}`;
+        resultDiv.appendChild(passedPara);
+        
+        const failedPara = document.createElement('p');
+        failedPara.textContent = `Failed: ${results.failed}`;
+        resultDiv.appendChild(failedPara);
+        
+        const totalPara = document.createElement('p');
+        totalPara.textContent = `Total: ${results.total}`;
+        resultDiv.appendChild(totalPara);
+        
+        const statusPara = document.createElement('p');
+        statusPara.textContent = results.success ? '✅ All tests passed!' : '❌ Some tests failed!';
+        resultDiv.appendChild(statusPara);
+        
+        const closeButton = document.createElement('button');
+        closeButton.id = 'closeResults';
+        closeButton.textContent = 'Close';
+        closeButton.style.padding = '5px 10px';
+        closeButton.style.background = '#0060df';
+        closeButton.style.color = 'white';
+        closeButton.style.border = 'none';
+        closeButton.style.borderRadius = '4px';
+        closeButton.style.cursor = 'pointer';
+        closeButton.style.marginTop = '10px';
+        resultDiv.appendChild(closeButton);
         
         document.body.appendChild(resultDiv);
         

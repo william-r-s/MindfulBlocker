@@ -1,3 +1,6 @@
+## [0.2.3] - 2025-04-05
+- fix bug in access grant regex
+
 ## [0.2.2] - 2025-03-31
 - fix bug in default prompt, redirection, allow settings export
 

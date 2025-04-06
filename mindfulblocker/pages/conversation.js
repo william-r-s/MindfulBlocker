@@ -11,9 +11,8 @@ const fullUrl = urlParams.get('url') || `https://${domain}`;
 let conversationHistory = [];
 let accessHistory = [];
 
-// Regex to enforce an EXACT match for the grant phrase, ignoring leading/trailing whitespace
-const EXACT_GRANT_REGEX = /^\s*ACCESS GRANTED for (\d+) minute*$/m;
-
+// Regex to enforce a match for the grant phrase, ignoring leading whitespace/ other trailing text
+const EXACT_GRANT_REGEX = /^\s*ACCESS GRANTED for (\d+) minutes?.*$/m;
 // When the page loads, set up everything
 document.addEventListener('DOMContentLoaded', initConversation);
 
